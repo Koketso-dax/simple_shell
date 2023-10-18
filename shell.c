@@ -8,16 +8,12 @@ int main(void)
 	char *cmd = NULL;
 	size_t len = 0;
 	ssize_t line = 0;
-	int x = 0;
 
-	while (x == 0 && line != EOF)
+	while (line != EOF)
 	{
-		printf("#cisfun$ ");
-		fflush(stdout);
+		_termReady();
 		line = getline(&cmd, &len, stdin);
-		x = _readline(line, cmd);
-		len = 0;
-		cmd = NULL;
+		_readline(line, cmd);
 	}
 	free(cmd);
 	return (0);
