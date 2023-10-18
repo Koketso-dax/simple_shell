@@ -55,7 +55,6 @@ ssize_t _getline(char **buff, size_t *n, FILE *stream)
  * _readline - will fork wait and execute cmd
  * @line: line size (-1) if invalid
  * @cmd: cmd str buffer
- * @len: cmd length
  * Return: 0 on success. 1 of fail.
  */
 int _readline(ssize_t line, char *cmd)
