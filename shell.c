@@ -11,9 +11,12 @@ int main(void)
 
 	while (line != EOF)
 	{
-		_termReady();
+		printf("#cisfun$ ");
+		fflush(stdout);
 		line = getline(&cmd, &len, stdin);
-		_readline(line, cmd);
+		_readline(len, cmd);
+		cmd = NULL;
+		len = 0;
 	}
 	free(cmd);
 	return (0);

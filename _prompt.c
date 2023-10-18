@@ -7,7 +7,7 @@
  * Return: Array of ptr
  */
 char **_splitstr(const char *input, char *delim)
-{	
+{
 	char **tmp, **words = NULL;
 	int count = 0;
 	char *token;
@@ -92,8 +92,7 @@ ssize_t _getline(char **buff, size_t *n, FILE *stream)
 /**
  * _readline - will fork wait and execute cmd
  * @line: line size (-1) if invalid
- * @cmd: cmd str buffer
- * Return: 0 on success. 1 of fail.
+ * @cmd: cmd str buffer.
  */
 void _readline(ssize_t line, char *cmd)
 {
@@ -103,29 +102,23 @@ void _readline(ssize_t line, char *cmd)
 
 	if (line == -1)
 	{
+		putchar('\n');
 		return;
+	}
+	if (line > 0 && cmd[line - 1] == '\n')
+	{
+		cmd[line - 1] = '\0';
 	}
 	argv = _splitstr(cmd, "\n");
 	child = fork();
 	if (child == -1)
 	{
-		perror(_getenv("_"));
-		exit(1);
+		perror("Error"), exit(1);
 	}
 	if (child == 0)
 	{
-		execve("/bin/sh", argv, environ);
-		perror(_getenv("_")), exit(1);
+		execve(argv[0], argv, environ);
+		perror("Error"), exit(1);
 	}
 	wait(&status);
-}
-/**
- * _termReady - will refresh shell
- */
-void _termReady(void)
-{
-	if (isatty(STDIN_FILENO))
-	{
-		printf("#cisfun$ ");
-	}
 }
