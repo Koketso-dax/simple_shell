@@ -10,7 +10,7 @@ int main(void)
 	ssize_t line = 0;
 	int x = 0;
 
-	while (x == 0)
+	while (x == 0 && line != EOF)
 	{
 		printf("#cisfun$ ");
 		fflush(stdout);
