@@ -15,7 +15,9 @@ int main(void)
 		printf("$ ");
 		fflush(stdout);
 		line = getline(&cmd, &len, stdin);
-		x = _readline(line, cmd); 
+		x = _readline(line, cmd);
+		printf("%s\n", cmd);
+		len = 0;
 		cmd = NULL;
 	}
 	free(cmd);
