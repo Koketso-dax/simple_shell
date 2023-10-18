@@ -56,38 +56,31 @@ ssize_t _getline(char **buff, size_t *n, FILE *stream)
  * @line: line size (-1) if invalid
  * @cmd: cmd str buffer
  * @len: cmd length
+ * Return: 0 on success. 1 of fail.
  */
-void _readline(ssize_t line, char *cmd, size_t len)
+int _readline(ssize_t line, char *cmd)
 {
 	pid_t child;
 	char *argv[4];
 	int status;
-	char **env = environ;
 
 	if (line == -1)
 	{
-		putchar('\n');
-	}
-	if (line > 0 && cmd[line - 1] == '\n')
-	{
-		cmd[len - 1] = '\0';
+		return (1);
 	}
 	child = fork();
 	if (child == -1)
 	{
-		perror("Error");
+		perror("Fork Failed");
 		exit(1);
 	}
 	if (child == 0)
 	{
 		argv[0] = "/bin/sh", argv[1] = "-c";
 		argv[2] = cmd, argv[3] = NULL;
-		execve("/bin/sh", argv, env);
-		perror("Error"), exit(1);
+		execve(argv[0], argv, environ);
+		perror("Failed to run execve"), exit(1);
 	}
-	else
-	{
-		waitpid(child, &status, 0);
-		printf("%s\n", cmd);
-	}
+	wait(&status);
+	return (0);
 }

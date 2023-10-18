@@ -33,7 +33,7 @@ char *_getenv(const char *name);
 
 ssize_t _getline(char **buff, size_t *n, FILE *stream);
 
-void _readline(ssize_t line, char *cmd, size_t len);
+int _readline(ssize_t line, char *cmd);
 
 char **_strtok(char *str, const char *delim);
 
