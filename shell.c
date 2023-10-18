@@ -16,7 +16,6 @@ int main(void)
 		fflush(stdout);
 		line = getline(&cmd, &len, stdin);
 		x = _readline(line, cmd);
-		printf("%s\n", cmd);
 		len = 0;
 		cmd = NULL;
 	}
