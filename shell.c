@@ -12,7 +12,7 @@ int main(void)
 
 	while (x == 0)
 	{
-		printf("$ ");
+		printf("#cisfun$ ");
 		fflush(stdout);
 		line = getline(&cmd, &len, stdin);
 		x = _readline(line, cmd);
