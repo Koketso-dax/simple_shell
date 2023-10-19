@@ -37,6 +37,6 @@ void _readline(ssize_t line, char *cmd);
 
 char **_splitstr(const char *str, char *delim);
 
-void _termReady(void);
+char **split_path(const char *path);
 
 #endif

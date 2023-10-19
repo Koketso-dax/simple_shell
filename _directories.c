@@ -47,3 +47,32 @@ void free_list(Node *head)
 		free(tmp);
 	}
 }
+
+char **split_path(const char *path)
+{
+	char *copy = strdup(path);
+	char **dirs = NULL;
+	char *token;
+	int count = 0;
+	char **tmp;
+	
+	if (copy == NULL)
+	{
+		perror("Error"), exit(1);
+	}
+	token = strtok(copy, ":");
+	while (token != NULL)
+	{
+		count++, free(copy);
+		tmp = realloc(dirs, count * sizeof(char *));
+		if (tmp == NULL)
+		{
+			perror("Error"), exit(1);
+		}
+		dirs = tmp;
+		dirs[count - 1] = strdup(token);
+		token = strtok(NULL, ":");
+	}
+	free(copy);
+	return (dirs);
+}

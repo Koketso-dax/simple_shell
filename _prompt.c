@@ -99,7 +99,6 @@ void _readline(ssize_t line, char *cmd)
 	pid_t child;
 	char **argv;
 	int status;
-	char *path = _getenv("PATH");
 
 	if (line == -1)
 	{
@@ -118,8 +117,11 @@ void _readline(ssize_t line, char *cmd)
 	}
 	if (child == 0)
 	{
-		execve(path, argv, environ);
+		execve(argv[0], argv, NULL);
 		perror(argv[0]), exit(1);
 	}
-	wait(&status);
+	else
+	{
+		wait(&status);
+	}
 }
