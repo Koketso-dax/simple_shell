@@ -97,8 +97,8 @@ ssize_t _getline(char **buff, size_t *n, FILE *stream)
 void _readline(ssize_t line, char *cmd)
 {
 	pid_t child;
-	char **argv;
 	int status;
+	char **argv;
 
 	if (line == -1)
 	{
@@ -109,11 +109,19 @@ void _readline(ssize_t line, char *cmd)
 	{
 		cmd[line - 1] = '\0';
 	}
-	argv = _splitstr(cmd, "\n");
-	child = fork();
+	cmd[strcspn(cmd, "\n")] = '\0';
+	argv = malloc(5 * sizeof(char *));
+	if (argv == NULL)
+	{
+		perror("Memory allocation failed");
+		free(cmd), exit(1);
+	}
+	argv[0] = "/bin/sh", argv[1] = "-i";
+	argv[2] = "-c", argv[3] = cmd;
+	argv[4] = NULL, child = fork();
 	if (child == -1)
 	{
-		perror("Error"), exit(1);
+		exit(1);
 	}
 	if (child == 0)
 	{
@@ -124,4 +132,6 @@ void _readline(ssize_t line, char *cmd)
 	{
 		wait(&status);
 	}
+	free(cmd);
+	free(argv);
 }
