@@ -91,24 +91,14 @@ ssize_t _getline(char **buff, size_t *n, FILE *stream)
 
 /**
  * _readline - will fork wait and execute cmd
- * @line: line size (-1) if invalid
  * @cmd: cmd str buffer.
  */
-void _readline(ssize_t line, char *cmd)
+void _readline(char *cmd)
 {
 	pid_t child;
 	int status;
 	char **argv;
 
-	if (line == -1)
-	{
-		putchar('\n');
-		return;
-	}
-	if (line > 0 && cmd[line - 1] == '\n')
-	{
-		cmd[line - 1] = '\0';
-	}
 	cmd[strcspn(cmd, "\n")] = '\0';
 	argv = malloc(5 * sizeof(char *));
 	if (argv == NULL)
