@@ -47,6 +47,11 @@ void free_list(Node *head)
 		free(tmp);
 	}
 }
+/**
+ * split_path - will split PATH var into str
+ * @path: PATH var
+ * Return: [] of ptr to dir names
+ */
 
 char **split_path(const char *path)
 {
@@ -55,7 +60,7 @@ char **split_path(const char *path)
 	char *token;
 	int count = 0;
 	char **tmp;
-	
+
 	if (copy == NULL)
 	{
 		perror("Error"), exit(1);
