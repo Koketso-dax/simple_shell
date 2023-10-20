@@ -98,24 +98,25 @@ void _readline(char *cmd)
 	pid_t child;
 	int status;
 	char **argv;
+	char **env = environ;
 
 	cmd[strcspn(cmd, "\n")] = '\0';
-	argv = malloc(5 * sizeof(char *));
+	argv = malloc(3 * sizeof(char *));
 	if (argv == NULL)
 	{
 		perror("Memory allocation failed");
 		free(cmd), exit(1);
 	}
-	argv[0] = "/bin/sh", argv[1] = "-i";
-	argv[2] = "-c", argv[3] = cmd;
-	argv[4] = NULL, child = fork();
+	argv[0] = "/bin/sh", argv[1] = "-c";
+	argv[2] = cmd, argv[3] = NULL;
+	child = fork();
 	if (child == -1)
 	{
 		exit(1);
 	}
 	if (child == 0)
 	{
-		execve(argv[0], argv, NULL);
+		execve(argv[0], argv, env);
 		perror(argv[0]), exit(1);
 	}
 	else
