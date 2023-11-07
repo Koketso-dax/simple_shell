@@ -6,13 +6,14 @@
  * @delim: delimiter
  * Return: Array of ptr
  */
-char **_splitstr(const char *input, char *delim)
+char **_splitstr(char *input, char *delim)
 {
 	char **tmp, **words = NULL;
 	int count = 0;
 	char *token;
-	char *copy = strdup(input);
+	char *copy;
 
+	copy = strdup(input);
 	if (copy == NULL)
 	{
 		perror("Error");
@@ -90,25 +91,19 @@ ssize_t _getline(char **buff, size_t *n, FILE *stream)
 }
 
 /**
- * _readline - will fork wait and execute cmd
- * @cmd: cmd str buffer.
+ * _runline - will fork wait and execute cmd
+ * @argv: argument vectors.
  */
-void _readline(char *cmd)
+void _runline(char **argv)
 {
 	pid_t child;
 	int status;
-	char **argv;
 	char **env = environ;
 
-	cmd[strcspn(cmd, "\n")] = '\0';
-	argv = malloc(3 * sizeof(char *));
 	if (argv == NULL)
 	{
-		perror("Memory allocation failed");
-		free(cmd), exit(1);
+		return;
 	}
-	argv[0] = "/bin/sh", argv[1] = "-c";
-	argv[2] = cmd, argv[3] = NULL;
 	child = fork();
 	if (child == -1)
 	{
@@ -123,6 +118,17 @@ void _readline(char *cmd)
 	{
 		wait(&status);
 	}
-	free(cmd);
-	free(argv);
+}
+/**
+ * freeargs - frees the array of pointers args
+ * @args: array of pointers
+ */
+
+void freeargs(char **args)
+{
+	int x;
+
+	for (x = 0; args[x]; x++)
+		free(args[x]);
+	free(args);
 }

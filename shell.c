@@ -5,28 +5,43 @@
  */
 int main(void)
 {
-	char *cmd = NULL;
+	char *cmd = NULL, *path, *cpath;
 	size_t len = 0;
 	ssize_t line = 0;
+	char **argv;
+	Node *head = '\0';
 
-	while (line != EOF)
+	while (line != -1)
 	{
-		printf("$ ");
-		fflush(stdout);
+		printf("$ "), fflush(stdout);
 		line = getline(&cmd, &len, stdin);
-		if (line == -1)
+		if (strcmp(cmd, "exit\n") == 0)
 		{
-			free(cmd);
-			exit(1);
+			break;
 		}
-		if (line > 0 && cmd[line - 1] == '\n')
+		cmd[len - 1] = '\0', argv = NULL;
+		argv = _splitstr(cmd, "\n");
+		if (!argv || !argv[0])
 		{
-			cmd[line - 1] = '\0';
+			_runline(argv);
 		}
-		_readline(cmd);
-		cmd = NULL;
-		len = 0;
+		else
+		{
+			path = _getenv("PATH"), head = join_paths(path);
+			cpath = _pathFilename(argv[0], head);
+			if (!cpath)
+			{
+				_runline(argv);
+			}
+			else if (cpath)
+			{
+				free(argv[0]), argv[0] = cpath;
+				_runline(argv);
+			}
+		}
 	}
 	free(cmd);
+	freeargs(argv);
+	free_list(head);
 	return (0);
 }

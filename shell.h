@@ -33,10 +33,14 @@ char *_getenv(const char *name);
 
 ssize_t _getline(char **buff, size_t *n, FILE *stream);
 
-void _readline(char *cmd);
+void _runline(char **argv);
 
-char **_splitstr(const char *str, char *delim);
+char **_splitstr(char *str, char *delim);
 
-char **split_path(const char *path);
+Node *join_paths(char *path);
+
+char *_pathFilename(char *filename, Node *head);
+
+void freeargs( char **args);
 
 #endif
