@@ -11,16 +11,16 @@ int main(void)
 	char **argv;
 	Node *head = '\0';
 
-	while (line != -1)
+	while (line != EOF)
 	{
 		is_interactive();
 		line = getline(&cmd, &len, stdin);
+		argv = _splitstr(cmd);
 		if (strcmp(cmd, "exit\n") == 0)
 		{
 			break;
 		}
-		argv = _splitstr(cmd);
-		if (*argv[0] == '/' || !argv)
+		else if (*argv[0] == '/' || !argv)
 		{
 			_runline(argv);
 		}

@@ -12,15 +12,15 @@ char **_splitstr(char *input)
 	size_t len = 0;
 
 	copy = strdup(input);
-	if(copy == NULL)
+	if (copy == NULL)
 	{
 		perror("Memory allocation failed"), exit(1);
 	}
 	len = strlen(copy);
-	if (copy[len - 1] == '\n')
+	if (len > 0 && copy[len - 1] == '\n')
 		copy[len - 1] = '\0';
 	token =  strtok(copy, delim);
-	while(token != NULL)
+	while (token != NULL)
 	{
 		words = realloc(words, (count + 1) * sizeof(char *));
 		if (words == NULL)
@@ -37,7 +37,6 @@ char **_splitstr(char *input)
 	free(copy);
 	return (words);
 }
-
 /**
  * _getline - will get a str entered by user and save it to a buffer
  * @buff: str entered
@@ -52,16 +51,14 @@ ssize_t _getline(char **buff, size_t *n, FILE *stream)
 	int ch;
 
 	if (!buff || !n || !stream)
-	{
 		return (-1);
-	} init_size = *n, line = *buff;
+	init_size = *n, line = *buff;
 	if (line == NULL)
 	{
 		line = malloc(init_size);
 		if (line == NULL)
-		{
 			return (-1);
-		} *n = init_size;
+		*n = init_size;
 	}
 	while (1)
 	{
@@ -83,10 +80,9 @@ ssize_t _getline(char **buff, size_t *n, FILE *stream)
 		{
 			final_size = init_size * 2, new_line = realloc(line, final_size);
 			if (new_line == NULL)
-			{
 				*buff = NULL;
 				return (-1);
-			} line = new_line, *n = final_size;
+			line = new_line, *n = final_size;
 		} line[len++] = (char)ch;
 	}
 }
@@ -112,13 +108,16 @@ void _runline(char **argv)
 	}
 	else if (child == 0)
 	{
-		signal(SIGINT, SIG_DFL);
 		execve(argv[0], argv, env);
 		perror(argv[0]), exit(1);
 	}
 	else
 	{
 		waitpid(child, &status, 0);
+		if (!isatty(STDIN_FILENO))
+		{
+			exit(0);
+		}
 	}
 }
 /**
@@ -131,7 +130,9 @@ void freeargs(char **args)
 	int x;
 
 	for (x = 0; args[x]; x++)
+	{
 		free(args[x]);
+	}
 	free(args);
 }
 

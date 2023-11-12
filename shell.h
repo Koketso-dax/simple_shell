@@ -39,7 +39,7 @@ Node *join_paths(char *path);
 
 char *_pathFilename(char *filename, Node *head);
 
-void freeargs( char **args);
+void freeargs(char **args);
 
 void is_interactive(void);
 
