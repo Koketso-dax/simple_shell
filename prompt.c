@@ -1,40 +1,39 @@
 #include "shell.h"
-
 /**
  * _splitstr - will split str to [] of ptr to words
  * @input: input str
- * @delim: delimiter
  * Return: Array of ptr
  */
-char **_splitstr(char *input, char *delim)
+char **_splitstr(char *input)
 {
-	char **tmp, **words = NULL;
+	char **words = NULL;
 	int count = 0;
-	char *token;
-	char *copy;
+	char *token, *copy, *delim = " \t\n";
+	size_t len = 0;
 
 	copy = strdup(input);
-	if (copy == NULL)
+	if(copy == NULL)
 	{
-		perror("Error");
-		exit(1);
+		perror("Memory allocation failed"), exit(1);
 	}
-	token = strtok(copy, delim);
-	while (token != NULL)
+	len = strlen(copy);
+	if (copy[len - 1] == '\n')
+		copy[len - 1] = '\0';
+	token =  strtok(copy, delim);
+	while(token != NULL)
 	{
-		count++;
-		tmp = realloc(words, (count + 1) * sizeof(char *));
-		if (tmp == NULL)
-		{
-			perror("Error");
-			free(copy);
-			exit(1);
-		}
-		words = tmp;
-		words[count - 1] = strdup(token);
-		words[count] = NULL;
-		token = strtok(NULL, delim);
+		words = realloc(words, (count + 1) * sizeof(char *));
+		if (words == NULL)
+			perror("Memory allocation failed"), exit(1);
+		words[count] = strdup(token);
+		if (words[count] == NULL)
+			perror("Memory allocation failed"), exit(1);
+		count++, token = strtok(NULL, delim);
 	}
+	words = realloc(words, (count + 1) * sizeof(char *));
+	if (words == NULL)
+		perror("Memory allocation failed"), exit(1);
+	words[count] = NULL;
 	free(copy);
 	return (words);
 }
@@ -54,14 +53,14 @@ ssize_t _getline(char **buff, size_t *n, FILE *stream)
 
 	if (!buff || !n || !stream)
 	{
-		exit(1);
+		return (-1);
 	} init_size = *n, line = *buff;
 	if (line == NULL)
 	{
 		line = malloc(init_size);
 		if (line == NULL)
 		{
-			exit(1);
+			return (-1);
 		} *n = init_size;
 	}
 	while (1)
@@ -76,7 +75,8 @@ ssize_t _getline(char **buff, size_t *n, FILE *stream)
 			}
 			else if (ch == EOF)
 			{
-				*buff = NULL, exit(1);
+				*buff = NULL;
+				return (-1);
 			}
 		}
 		if (len + 1 >= init_size)
@@ -84,7 +84,8 @@ ssize_t _getline(char **buff, size_t *n, FILE *stream)
 			final_size = init_size * 2, new_line = realloc(line, final_size);
 			if (new_line == NULL)
 			{
-				*buff = NULL, exit(1);
+				*buff = NULL;
+				return (-1);
 			} line = new_line, *n = final_size;
 		} line[len++] = (char)ch;
 	}
@@ -109,14 +110,15 @@ void _runline(char **argv)
 	{
 		exit(1);
 	}
-	if (child == 0)
+	else if (child == 0)
 	{
+		signal(SIGINT, SIG_DFL);
 		execve(argv[0], argv, env);
 		perror(argv[0]), exit(1);
 	}
 	else
 	{
-		wait(&status);
+		waitpid(child, &status, 0);
 	}
 }
 /**
@@ -131,4 +133,15 @@ void freeargs(char **args)
 	for (x = 0; args[x]; x++)
 		free(args[x]);
 	free(args);
+}
+
+/**
+ * is_interactive - will check if interactive / non-interactive.
+ */
+void is_interactive(void)
+{
+	if (isatty(STDIN_FILENO))
+	{
+		write(STDOUT_FILENO, "$ ", 2);
+	}
 }

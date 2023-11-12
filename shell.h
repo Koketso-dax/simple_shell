@@ -25,8 +25,6 @@ typedef struct Node
 
 Node *append_dir(Node *head, char *dir);
 
-void view_dir(Node *head);
-
 void free_list(Node *head);
 
 char *_getenv(const char *name);
@@ -35,12 +33,14 @@ ssize_t _getline(char **buff, size_t *n, FILE *stream);
 
 void _runline(char **argv);
 
-char **_splitstr(char *str, char *delim);
+char **_splitstr(char *str);
 
 Node *join_paths(char *path);
 
 char *_pathFilename(char *filename, Node *head);
 
 void freeargs( char **args);
+
+void is_interactive(void);
 
 #endif

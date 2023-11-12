@@ -26,18 +26,6 @@ Node *append_dir(Node *head, char *dir)
 	return (_node);
 }
 /**
- * view_dir - will print directories in linked list
- * @head: ptr to head list item
- */
-void view_dir(Node *head)
-{
-	while (head)
-	{
-		printf("%s\n", head->dir);
-		head = head->next;
-	}
-}
-/**
  * free_list - frees list of directories in memory
  * @head: ptr to head of list
  */
@@ -92,7 +80,7 @@ Node *join_paths(char *path)
  * Return: str or NULL.
  */
 
-char *_getFilename(char *filename, Node *head)
+char *_pathFilename(char *filename, Node *head)
 {
 	struct stat st;
 	char *str = NULL;

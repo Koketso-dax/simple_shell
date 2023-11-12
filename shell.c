@@ -13,15 +13,14 @@ int main(void)
 
 	while (line != -1)
 	{
-		printf("$ "), fflush(stdout);
+		is_interactive();
 		line = getline(&cmd, &len, stdin);
 		if (strcmp(cmd, "exit\n") == 0)
 		{
 			break;
 		}
-		cmd[len - 1] = '\0', argv = NULL;
-		argv = _splitstr(cmd, "\n");
-		if (!argv || !argv[0])
+		argv = _splitstr(cmd);
+		if (*argv[0] == '/' || !argv)
 		{
 			_runline(argv);
 		}
@@ -29,15 +28,8 @@ int main(void)
 		{
 			path = _getenv("PATH"), head = join_paths(path);
 			cpath = _pathFilename(argv[0], head);
-			if (!cpath)
-			{
-				_runline(argv);
-			}
-			else if (cpath)
-			{
-				free(argv[0]), argv[0] = cpath;
-				_runline(argv);
-			}
+			free(argv[0]), argv[0] = cpath;
+			_runline(argv);
 		}
 	}
 	free(cmd);
