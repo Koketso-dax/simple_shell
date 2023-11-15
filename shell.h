@@ -43,4 +43,8 @@ void freeargs(char **args);
 
 void is_interactive(void);
 
+int checkCmdValidity(char **argv);
+
+void _nonIntExit(void);
+
 #endif

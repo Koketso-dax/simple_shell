@@ -81,7 +81,7 @@ ssize_t _getline(char **buff, size_t *n, FILE *stream)
 			final_size = init_size * 2, new_line = realloc(line, final_size);
 			if (new_line == NULL)
 				*buff = NULL;
-				return (-1);
+			return (-1);
 			line = new_line, *n = final_size;
 		} line[len++] = (char)ch;
 	}
@@ -97,8 +97,14 @@ void _runline(char **argv)
 	int status;
 	char **env = environ;
 
-	if (argv == NULL)
+	if (!argv)
 	{
+		return;
+	}
+	if (!checkCmdValidity(argv))
+	{
+		perror(argv[0]);
+		_nonIntExit();
 		return;
 	}
 	child = fork();
@@ -109,15 +115,13 @@ void _runline(char **argv)
 	else if (child == 0)
 	{
 		execve(argv[0], argv, env);
-		perror(argv[0]), exit(1);
+		perror(argv[0]);
+		exit(1);
 	}
 	else
 	{
 		waitpid(child, &status, 0);
-		if (!isatty(STDIN_FILENO))
-		{
-			exit(0);
-		}
+		_nonIntExit();
 	}
 }
 /**
@@ -129,9 +133,12 @@ void freeargs(char **args)
 {
 	int x;
 
-	for (x = 0; args[x]; x++)
+	if (args != NULL)
 	{
-		free(args[x]);
+		for (x = 0; args[x]; x++)
+		{
+			free(args[x]);
+		}
 	}
 	free(args);
 }

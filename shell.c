@@ -20,16 +20,19 @@ int main(void)
 		{
 			break;
 		}
-		else if (*argv[0] == '/' || !argv)
-		{
-			_runline(argv);
-		}
 		else
 		{
-			path = _getenv("PATH"), head = join_paths(path);
+			path = getenv("PATH"), head = join_paths(path);
 			cpath = _pathFilename(argv[0], head);
-			free(argv[0]), argv[0] = cpath;
-			_runline(argv);
+			if (!cpath && argv != NULL)
+			{
+				_runline(argv);
+			}
+			else
+			{
+				free(argv[0]), argv[0] = cpath;
+				_runline(argv);
+			}
 		}
 	}
 	free(cmd);
