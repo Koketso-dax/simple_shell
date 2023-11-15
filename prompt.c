@@ -150,7 +150,7 @@ void is_interactive(void)
 {
 	if (isatty(STDIN_FILENO))
 	{
-		prinft("%s", "#cisfun$ ");
+		printf("%s", "#cisfun$ ");
 		fflush(stdout);
 	}
 }
