@@ -103,7 +103,7 @@ void _runline(char **argv)
 	}
 	if (!checkCmdValidity(argv))
 	{
-		perror(argv[0]);
+		fprintf(stderr, "%s: %s: not found\n", argv[0], argv[0]);
 		_nonIntExit();
 		return;
 	}
@@ -121,6 +121,8 @@ void _runline(char **argv)
 	else
 	{
 		waitpid(child, &status, 0);
+		if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
+			perror(argv[0]);
 		_nonIntExit();
 	}
 }
